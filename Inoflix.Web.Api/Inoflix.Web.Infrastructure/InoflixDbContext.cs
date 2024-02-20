@@ -1,4 +1,5 @@
-﻿using Inoflix.Web.Domain.User;
+﻿using Inoflix.Web.Domain.AppLicense;
+using Inoflix.Web.Domain.User;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,12 +17,15 @@ namespace Inoflix.Web.Infrastructure
     {
         public InoflixDbContext()
         {
-            
+           
         }
         public InoflixDbContext(DbContextOptions<InoflixDbContext> options) :
             base(options)
-        {
+        {          
         }
+
+
+        public DbSet<InoflixLicense> InoflixLicenses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
