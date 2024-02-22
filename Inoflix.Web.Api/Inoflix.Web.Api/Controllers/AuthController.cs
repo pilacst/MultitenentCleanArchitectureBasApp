@@ -18,7 +18,7 @@ namespace Inoflix.Web.Api.Controllers
         public async Task<IActionResult> Index()
         {
             var licnese = await _inoflixLicenseService.GetLicenseAsync();
-            return Ok();
+            return Ok(licnese);
         }
     }
 }
