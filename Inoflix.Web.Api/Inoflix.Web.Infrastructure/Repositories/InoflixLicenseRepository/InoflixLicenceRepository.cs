@@ -1,6 +1,8 @@
 ﻿using Inoflix.Web.Application.Contracts.Repository;
 using Microsoft.EntityFrameworkCore;
 using Inoflix.Web.Domain.AppLicense;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 
 namespace Inoflix.Web.Infrastructure.Repositories.InoflixLicenseRepository
 {
@@ -8,14 +10,24 @@ namespace Inoflix.Web.Infrastructure.Repositories.InoflixLicenseRepository
     {
         private readonly InoflixDbContext _dbContext;
 
-        public InoflixLicenceRepository(InoflixDbContext dbContext)
+        public InoflixLicenceRepository(
+            InoflixDbContextFactory factory)
         {
-            _dbContext = dbContext;
+
+                _dbContext = factory.Create();
         }
 
         public async Task<IEnumerable<InoflixLicense>> GetInoflixLicenseAsync(int id)
         {
-            return await _dbContext.InoflixLicenses.ToListAsync();
+            try
+            {
+                return await _dbContext.InoflixLicenses.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
     }
 }

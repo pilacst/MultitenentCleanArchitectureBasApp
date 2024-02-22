@@ -2,6 +2,7 @@
 using Inoflix.Web.Domain.User;
 using Inoflix.Web.Infrastructure.Repositories;
 using Inoflix.Web.Infrastructure.Repositories.Base;
+using Inoflix.Web.Infrastructure.Repositories.InoflixLicenseRepository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -15,15 +16,21 @@ namespace Inoflix.Web.Infrastructure
     public static class DependencyInjectionConfig
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, ConfigurationManager config)
-        {           
+        {
+            services.Configure<List<TenantConfigOptions>>(
+                config.GetSection(TenantConfigOptions.Tenants));
+            services.AddDbContext<InoflixDbContext>();
+            services.AddScoped<InoflixDbContextFactory>();
+
             services.AddIdentity<ApplicationUser, ApplicationRoles>()
                .AddEntityFrameworkStores<InoflixDbContext>()
                .AddDefaultTokenProviders();
 
-            services.AddDbContext<InoflixDbContext>(
-                 options => options.UseSqlServer(config.GetConnectionString("DefaultConnection"))
-             );
+            //services.AddDbContext<InoflixDbContext>(
+            //     options => options.UseSqlServer(config.GetConnectionString("DefaultConnection"))
+            // );
 
+            
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -45,6 +52,7 @@ namespace Inoflix.Web.Infrastructure
 
             services.AddScoped<IUnitIOfWork, UnitOfWork>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IInoflixLicenseRepository, InoflixLicenceRepository>();
 
             return services;
         }
