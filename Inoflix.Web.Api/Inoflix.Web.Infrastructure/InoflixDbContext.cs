@@ -1,4 +1,5 @@
-﻿using Inoflix.Web.Domain.User;
+﻿using Inoflix.Web.Domain.AppLicense;
+using Inoflix.Web.Domain.User;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,17 +15,33 @@ namespace Inoflix.Web.Infrastructure
         ApplicationRoleClaim, 
         ApplicationUserToken>
     {
+        private readonly string _connectionString;
+
         public InoflixDbContext()
-        {
-            
-        }
-        public InoflixDbContext(DbContextOptions<InoflixDbContext> options) :
-            base(options)
         {
         }
 
+        public InoflixDbContext(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
+        public InoflixDbContext(DbContextOptions<InoflixDbContext> options) :
+            base(options)
+        {         
+            
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer(_connectionString);
+        }
+
+
+        public DbSet<InoflixLicense> InoflixLicenses { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<ApplicationRoles>().HasData(
