@@ -3,14 +3,12 @@ using Microsoft.Extensions.Options;
 
 namespace Inoflix.Web.Infrastructure
 {
-    public class InoflixDbContextFactory
+    public class InoflixScopedDbContextFactory: IInoflixScopedDbContextFactory
     {
         private readonly string connectionString;
         private readonly TenantConfigOptions _tenant;
-        private InoflixDbContext _context;
-        private static readonly object contextLock = new();
 
-        public InoflixDbContextFactory(IHttpContextAccessor httpContextAccessor,
+        public InoflixScopedDbContextFactory(IHttpContextAccessor httpContextAccessor,
             IOptions<List<TenantConfigOptions>> tenants)
         {
             var tenentId = httpContextAccessor?.HttpContext?.Request.Headers["X-TenentId"];
@@ -20,13 +18,7 @@ namespace Inoflix.Web.Infrastructure
 
         public InoflixDbContext Create()
         {
-            if (_context == null)
-            {
-                lock(contextLock)
-                {
-                    _context ??= new InoflixDbContext(connectionString);
-                }
-            }
+            InoflixDbContext _context = new(connectionString);
             return _context;
         }
     }

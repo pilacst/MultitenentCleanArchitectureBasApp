@@ -20,7 +20,9 @@ namespace Inoflix.Web.Infrastructure
             services.Configure<List<TenantConfigOptions>>(
                 config.GetSection(TenantConfigOptions.Tenants));
             services.AddDbContext<InoflixDbContext>();
-            services.AddScoped<InoflixDbContextFactory>();
+
+            services.AddSingleton<IInoflixSingletonDbContextFactory, InoflixSingaltonDbContextFactory>();
+            services.AddScoped<IInoflixScopedDbContextFactory, InoflixScopedDbContextFactory>();
 
             services.AddIdentity<ApplicationUser, ApplicationRoles>()
                .AddEntityFrameworkStores<InoflixDbContext>()

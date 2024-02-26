@@ -6,18 +6,22 @@ namespace Inoflix.Web.Infrastructure.Repositories.InoflixLicenseRepository
 {
     public class InoflixLicenceRepository : IInoflixLicenseRepository
     {
-        private readonly InoflixDbContext _dbContext;
+        private readonly IInoflixScopedDbContextFactory _factory;
+        //private readonly InoflixDbContext _context;
 
         public InoflixLicenceRepository(
-            InoflixDbContextFactory factory)
+            IInoflixScopedDbContextFactory factory)
         {
-            _dbContext = factory.Create();
+            _factory = factory;
+            //_context = factory.Create();
         }
 
         public async Task<IEnumerable<InoflixLicense>> GetInoflixLicenseAsync(int id)
         {
-            var license = await _dbContext.InoflixLicenses.ToListAsync();
+            using InoflixDbContext _context = _factory.Create();
+            var license = await _context.InoflixLicenses.ToListAsync();
             return license;
         }
     }
 }
+
