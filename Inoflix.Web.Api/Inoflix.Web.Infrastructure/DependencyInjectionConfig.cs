@@ -1,6 +1,7 @@
 ﻿using Inoflix.Web.Application.Contracts.Repository;
-using Inoflix.Web.Domain.User;
+using Inoflix.Web.Domain.Account;
 using Inoflix.Web.Infrastructure.Repositories;
+using Inoflix.Web.Infrastructure.Repositories.Auth;
 using Inoflix.Web.Infrastructure.Repositories.Base;
 using Inoflix.Web.Infrastructure.Repositories.InoflixLicenseRepository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -17,20 +18,19 @@ namespace Inoflix.Web.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, ConfigurationManager config)
         {
-            services.Configure<List<TenantConfigOptions>>(
-                config.GetSection(TenantConfigOptions.Tenants));
-            services.AddDbContext<InoflixDbContext>();
+            services.Configure<List<TenantConfigOptions>>(config.GetSection(TenantConfigOptions.Tenants));
 
+            services.AddDbContext<InoflixDbContext>();
             services.AddSingleton<IInoflixSingletonDbContextFactory, InoflixSingaltonDbContextFactory>();
             services.AddScoped<IInoflixScopedDbContextFactory, InoflixScopedDbContextFactory>();
 
             services.AddIdentity<ApplicationUser, ApplicationRoles>()
-               .AddEntityFrameworkStores<InoflixDbContext>()
+               .AddEntityFrameworkStores<InoflixIdentityDbContext>()
                .AddDefaultTokenProviders();
 
-            //services.AddDbContext<InoflixDbContext>(
-            //     options => options.UseSqlServer(config.GetConnectionString("DefaultConnection"))
-            // );
+            services.AddDbContext<InoflixIdentityDbContext>(
+                 options => options.UseSqlServer(config.GetConnectionString("DefaultConnection"))
+             );
 
             
             services.AddAuthentication(options =>
@@ -53,7 +53,8 @@ namespace Inoflix.Web.Infrastructure
             });
 
             services.AddScoped<IUnitIOfWork, UnitOfWork>();
-            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IInoflixLicenseRepository, InoflixLicenceRepository>();
 
             return services;

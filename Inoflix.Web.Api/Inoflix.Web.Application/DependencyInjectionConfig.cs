@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Inoflix.Web.Application.Features.Users.Command;
 using Inoflix.Web.Application.Helpers;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -8,7 +9,8 @@ namespace Inoflix.Web.Application
 {
     public static class DependencyInjectionConfig
     {
-        public static IServiceCollection AddApplication(this IServiceCollection services)
+        public static IServiceCollection AddApplication(this IServiceCollection services, 
+            ConfigurationManager config)
         {
             var curruntAssembly = typeof(DependencyInjectionConfig).Assembly;
             services.AddMediatR(config =>
@@ -17,6 +19,7 @@ namespace Inoflix.Web.Application
                 config.Lifetime = ServiceLifetime.Scoped;
             });
 
+            services.Configure<TokenConfigOptions>(config.GetSection(TokenConfigOptions.JWT));
             //foreach (System.Reflection.TypeInfo typeIntreface in curruntAssembly.GetTypes().Where(x => x.IsInterface == true).Cast<TypeInfo>())
             //{
             //    if (typeIntreface.ImplementedInterfaces.Any() && typeIntreface.ImplementedInterfaces.Where(x => x.Name == typeof(IBaseService).Name).Any())

@@ -1,16 +1,19 @@
 ﻿using Inoflix.Web.Application.Contracts.Repository;
-using Inoflix.Web.Domain.User;
+using Inoflix.Web.Application.Contracts.Service;
+using Inoflix.Web.Domain.Account;
 using Microsoft.AspNetCore.Identity;
 
 namespace Inoflix.Web.Infrastructure.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class AccountRepository : IAccountRepository
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ITokenService _tokenService;
 
-        public UserRepository(UserManager<ApplicationUser> userManager)
+        public AccountRepository(UserManager<ApplicationUser> userManager, ITokenService tokenService)
         {
             _userManager = userManager;
+            _tokenService = tokenService;
         }
 
         public async Task<IdentityResult> CreateAsync(ApplicationUser user, string password, string role)
