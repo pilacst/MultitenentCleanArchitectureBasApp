@@ -18,7 +18,7 @@ namespace Inoflix.Web.Application.Services
         {
             var result =  await _inoflixLicenseRepository.GetInoflixLicenseAsync(11);
 
-            return result?.FirstOrDefault()?.LicenseType;
+            return result?.FirstOrDefault()?.LicenseType.ToString();
         }
     }
 }

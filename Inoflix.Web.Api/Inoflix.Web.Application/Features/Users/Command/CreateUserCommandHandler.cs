@@ -1,14 +1,14 @@
 ﻿using Inoflix.Web.Application.Contracts.Repository;
-using Inoflix.Web.Domain.User;
+using Inoflix.Web.Domain.Account;
 using MediatR;
 
 namespace Inoflix.Web.Application.Features.Users.Command
 {
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, CreateUserResponse>
     {
-        private readonly IUserRepository _user;
+        private readonly IAccountRepository _user;
 
-        public CreateUserCommandHandler(IUserRepository user)
+        public CreateUserCommandHandler(IAccountRepository user)
         {
             _user = user;
         }
@@ -23,7 +23,8 @@ namespace Inoflix.Web.Application.Features.Users.Command
                 UserName = request.UserName,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
-                PhoneNumber = request.MobileNumber ?? null
+                PhoneNumber = request.MobileNumber ?? null,
+                TenantId = request.TenantId
             };
 
             var result = await _user.CreateAsync(applicationUser, request.Password, request.UserRole);
