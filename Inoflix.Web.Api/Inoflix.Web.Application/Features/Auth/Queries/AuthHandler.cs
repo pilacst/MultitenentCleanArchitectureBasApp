@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Inoflix.Web.Application.Features.Auth.Queries
 {
-    public class AuthHandler : IRequestHandler<AuthQuery, AuthResponse>
+    public record AuthHandler : IRequestHandler<AuthQuery, AuthResponse>
     {
         private readonly IAuthRepository _authRepository;
         public AuthHandler(IAuthRepository authRepository)

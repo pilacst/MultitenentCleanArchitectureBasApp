@@ -8,7 +8,6 @@ namespace Inoflix.Web.Api.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IInoflixLicenseService _inoflixLicenseService;
         private readonly IAuthService _authService;
         private readonly ITokenService _tokenService;
 
@@ -16,17 +15,10 @@ namespace Inoflix.Web.Api.Controllers
             IAuthService authService,
             ITokenService tokenService)
         {
-            _inoflixLicenseService = inoflixLicenseService;
             _authService = authService;
             _tokenService = tokenService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var licnese = await _inoflixLicenseService.GetLicenseAsync();
-            return Ok(licnese);
-        }
 
         [HttpPost]
         public async Task<IActionResult> LoginAsync(AuthQuery user)

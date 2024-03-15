@@ -18,7 +18,7 @@ namespace Inoflix.Web.Infrastructure
 
         public InoflixDbContext Create()
         {
-            InoflixDbContext _context = new(connectionString);
+            using InoflixDbContext _context = new(connectionString);
             return _context;
         }
     }

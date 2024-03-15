@@ -18,7 +18,7 @@ namespace Inoflix.Web.Infrastructure.Repositories.InoflixLicenseRepository
 
         public async Task<IEnumerable<InoflixLicense>> GetInoflixLicenseAsync(int id)
         {
-            using InoflixDbContext _context = _factory.Create();
+            var _context = _factory.Create();
             var license = await _context.InoflixLicenses.ToListAsync();
             return license;
         }
